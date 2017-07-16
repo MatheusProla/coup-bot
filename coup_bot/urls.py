@@ -20,11 +20,11 @@ from . import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-url(r'^start/', views.start),
-url(r'^play/', views.play),
-url(r'^tries_to_block/', views.tries_to_block),
-url(r'^challenge/', views.challenge),
-url(r'^lose_influence/', views.lose_influence),
-url(r'^inquisitor/(?P<action>.*)', views.inquisitor),
-url(r'^status/(?P<action>.*)', views.status),
+    url(r'^start/$', views.start),
+    url(r'^play/$', views.play),
+    url(r'^tries_to_block/$', views.tries_to_block),
+    url(r'^challenge/$', views.challenge),
+    url(r'^lose_influence/$', views.lose_influence),
+    url(r'^inquisitor/(?P<action>.*)$', views.inquisitor),
+    url(r'^status/(?P<action>.*)$', views.status),
 ]

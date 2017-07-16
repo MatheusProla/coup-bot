@@ -5,6 +5,7 @@ bot_player = RandomBot()
 
 import json
 
+
 def __decode_data(request):
     if request.method == 'POST':
         return json.loads(request.body)
@@ -51,7 +52,7 @@ def tries_to_block(request):
 '''
     action: int
     player: string
-    card: int
+    card: string
 '''
 def challenge(request):
     data = __decode_data(request)
@@ -67,7 +68,10 @@ def lose_influence(request):
     bot_player.lose_influence()
     return HttpResponse()
 
-
+'''
+    player: string
+    card: string
+'''
 def inquisitor(request, action):
     data = __decode_data(request)
     if action == 'give_card_to_inquisitor':
@@ -83,6 +87,15 @@ def inquisitor(request, action):
         raise Http404
     return HttpResponse(__encode_data(response))
 
+'''
+    players: list
+    player_acting: string,
+    action": int
+    player_blocking: string,
+    challenger: int,
+    challenged: int,
+    card: string
+'''
 def status(request, action):
     data = __decode_data(request)
     if action == 'status':
