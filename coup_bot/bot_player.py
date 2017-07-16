@@ -22,9 +22,8 @@ class RandomBot:
 
     def play(self, must_coup):
         sorted(self.opponents.items(), key=lambda x: x[1]['coins'], reverse=True)
-        print self.opponents
-        if (must_coup or (self.coins >= 7 and randint(0, 2) == 1)):
-            return {'action': COUP}
+        if must_coup or (self.coins >= 7 and randint(0, 2) == 1):
+            return {'action': COUP, 'target': self.opponents.keys()[0]}
         else:
             if DUKE in self.cards:
                 return {'action': COLLECT_TAXES}
@@ -33,13 +32,13 @@ class RandomBot:
             elif ASSASSIN in self.cards and self.coins >= 3:
                 return {'action': ASSASSIN, 'target': self.opponents.keys()[0]}
             elif randint(0, 3) == 1:
-                return {'action': FOREIGN_AID}
+                return {'action': FOREIGN_AID, 'target': None}
             elif randint(0, 5) == 1:
-                return {'action': EXCHANGE}
+                return {'action': EXCHANGE, 'target': None}
             elif randint(0, 4) == 1:
                 return {'action': INVESTIGATE, 'target': self.opponents.keys()[0]}
             else:
-                return {'action': INCOME}
+                return {'action': INCOME, 'target': None}
 
     def tries_to_block(self, action, player):
         if action == EXTORTION:
@@ -53,7 +52,7 @@ class RandomBot:
         elif ASSASSINATE:
             if CONTESSA in self.cards:
                 return {'attempt_block': True, 'card': CONTESSA}
-        return {'attempt_block': False}
+        return {'attempt_block': False, 'card': None}
 
     def challenge(self, action, player, card):
         if (card == DUKE and randint(0, 1) == 0):
@@ -67,14 +66,14 @@ class RandomBot:
     def give_card_to_inquisitor(self, player):
         return {'card': self.cards[0]}
 
-    def show_card_to_inquisitor(self):
+    def show_card_to_inquisitor(self, player, card):
         return {'change_card': True}
 
-    def choose_card_to_return(self, player, card):
+    def choose_card_to_return(self, card):
         return {'card': self.cards[0]}
 
     def signal_status(self, players):
-        pass
+        self.opponents = players
 
     def signal_new_turn(self, player):
         pass

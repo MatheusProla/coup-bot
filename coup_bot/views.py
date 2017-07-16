@@ -45,7 +45,7 @@ def play(request):
 def tries_to_block(request):
     data = __decode_data(request)
     action = data['action']
-    player = data['player']
+    player = data['opponent']
     response = bot_player.tries_to_block(action, player)
     return HttpResponse(__encode_data(response))
 
@@ -57,7 +57,7 @@ def tries_to_block(request):
 def challenge(request):
     data = __decode_data(request)
     action = data['action']
-    player = data['player']
+    player = data['opponent']
     card = data['card']
     response = bot_player.challenge(action, player, card)
     return HttpResponse(__encode_data(response))
@@ -78,11 +78,12 @@ def inquisitor(request, action):
         player = data['player']
         response = bot_player.give_card_to_inquisitor(player)
     elif action =='show_card_to_inquisitor':
-        response = bot_player.show_card_to_inquisitor()
-    elif action == 'choose_card_to_return':
         player = data['player']
         card = data['card']
-        response = bot_player.choose_card_to_return(player, card)
+        response = bot_player.show_card_to_inquisitor(player, card)
+    elif action == 'choose_card_to_return':
+        card = data['card']
+        response = bot_player.choose_card_to_return(card)
     else:
         raise Http404
     return HttpResponse(__encode_data(response))
@@ -102,12 +103,12 @@ def status(request, action):
         players = data['players']
         bot_player.signal_status(players)
     elif action == 'new_turn':
-        player = data['player']
+        player = data['opponent']
         bot_player.signal_new_turn(player)
     elif action == 'blocking':
         player_acting = data['player_acting']
         action = data['action']
-        player = data['player']
+        player = data['opponent']
         card = data['card']
         bot_player.signal_blocking(player_acting, action, player, card)
     elif action == 'lost_influence':
@@ -120,7 +121,7 @@ def status(request, action):
         card = data['card']
         bot_player.signal_challenge(challenger, challenged, card)
     elif action == 'action':
-        player = data['player']
+        player = data['opponent']
         action = data['action']
         player_targetted = data['player_targetted']
         bot_player.signal_action(player, action, player_targetted)
